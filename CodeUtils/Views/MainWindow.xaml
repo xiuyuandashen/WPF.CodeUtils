@@ -1,0 +1,125 @@
+﻿<Window
+    x:Class="CodeUtils.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:prism="http://prismlibrary.com/"
+    Title="{Binding Title}"
+    Width="1280"
+    Height="720"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="9*" />
+        </Grid.RowDefinitions>
+        <hc:Drawer
+            Name="DrawerLeft"
+            Grid.Row="2"
+            Grid.RowSpan="2"
+            Margin="0,169,0,0"
+            Dock="Left"
+            IsOpen="{Binding Open, Mode=TwoWay}"
+            ShowMode="Push">
+            <Border
+                Width="200"
+                Background="#eee"
+                BorderThickness="0,1,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Button
+                        Grid.Row="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="top"
+                        hc:IconElement.Geometry="{StaticResource DeleteFillCircleGeometry}"
+                        Command="hc:ControlCommands.Close"
+                        Foreground="{DynamicResource PrimaryTextBrush}"
+                        Style="{StaticResource ButtonIcon}" />
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Width="55"
+                            Height="55"
+                            Margin="10"
+                            Source="/Assets/Images/user.jpg">
+                            <Image.Clip>
+                                <EllipseGeometry
+                                    Center="25,25"
+                                    RadiusX="25"
+                                    RadiusY="25" />
+                            </Image.Clip>
+                        </Image>
+                        <Border
+                            Margin="5,0"
+                            BorderBrush="#999"
+                            BorderThickness="0,0,0,1" />
+                        <TextBlock
+                            Margin="10,5"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="{Binding Title}" />
+                        <ListBox
+                            x:Name="MenuBar"
+                            Margin="5,5"
+                            ItemContainerStyle="{StaticResource MyListBoxItemStyle}"
+                            ItemsSource="{Binding Menus}"
+                            SelectionChanged="MenuBar_SelectionChanged"
+                            Style="{DynamicResource ListBoxCustom}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding NavigationCommand}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            Margin="8,0,10,0"
+                                            VerticalAlignment="Center"
+                                            FontFamily="/Assets/Fonts/#iconfont"
+                                            FontSize="18"
+                                            Text="{Binding Icon}" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Width="150"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Title}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </hc:Drawer>
+
+        <ToggleButton
+            Grid.Row="0"
+            Width="40"
+            Height="40"
+            Margin="10,10,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Content="&#xe613;"
+            FontFamily="/Assets/Fonts/#iconfont"
+            FontSize="22"
+            IsChecked="{Binding IsOpen, ElementName=DrawerLeft}" />
+        <ContentControl
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Margin="10,0"
+            prism:RegionManager.RegionName="{Binding MainRegion}" />
+    </Grid>
+</Window>
